@@ -11,6 +11,7 @@
 #include <bluetooth/services/hrs.h>
 #include <drivers/led.h>
 #include <drivers/gpio.h>
+#include <power/power.h>
 
 int lab2_init(struct device *gpio);
 
