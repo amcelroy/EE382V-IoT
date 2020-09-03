@@ -5,7 +5,7 @@
  *      Author: mcelr
  */
 
-#include "iot_packet.h"
+#include "../include/iot_packet.h"
 
 uint8_t current_packet_buffer[sizeof(uint32_t)];
 
@@ -22,7 +22,7 @@ void IoT_Packet_Reset(struct IoT_PACKET *packet){
     packet->current_packet = 0;
     packet->total_packets = 0;
     memset(packet->header, 0, HEADER_SIZE);
-    memset(packet->data, 0, DATA_SIZE)
+    memset(packet->data, 0, DATA_SIZE);
     internal_zero_byte_counter = 0;
 }
 
@@ -184,7 +184,7 @@ int IoT_Packet_Add_Byte(struct IoT_PACKET *packet, uint8_t byte) {
         packet->data[packet->current_byte_data] = byte;
         packet->current_byte_data += 1;
 
-        if (packet->current_byte_data >= packet->data_size) {
+        if (packet->current_byte_data >= DATA_SIZE) {
             if(IoT_Packet_Validate(packet)){
                 if(IoT_Packet_Complete_Callback != 0){
                     IoT_Packet_Complete_Callback(packet);
@@ -207,8 +207,8 @@ uint32_t IoT_Packet_Sizeof(struct IoT_PACKET *data){
     return PACKET_SIZE;
 }
 
-uint16_t IoT_Packet_Generate_Checksum(struct IoT_PACKET *packet, bool store){
-    uint16_t tmp_crc = IoT_Checksum_CRC16((char*)packet->data, packet->data_size);
+uint16_t IoT_Packet_Generate_Checksum(struct IoT_PACKET *packet, uint8_t store){
+    uint16_t tmp_crc = IoT_Checksum_CRC16((char*)packet->data, DATA_SIZE);
     if(store){
         packet->checksum = tmp_crc;
     }

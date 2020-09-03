@@ -1,4 +1,4 @@
-#include "iot_checksum.h" //Broken linking issues in vMicro
+#include "../include/iot_checksum.h" //Broken linking issues in vMicro
 
 unsigned short IoT_Checksum_CRC16(char *data_p, unsigned short length)
 {

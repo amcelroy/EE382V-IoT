@@ -62,11 +62,10 @@ struct IoT_PACKET {
     char header[16];
     uint16_t checksum;
     uint32_t current_packet;
-    uint32_t total_packet;
+    uint32_t total_packets;
     uint8_t data[DATA_SIZE];
     uint32_t current_byte_data;
     uint32_t current_byte;
-#endif
 };
 
 /**
