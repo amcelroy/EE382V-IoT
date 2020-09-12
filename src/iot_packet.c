@@ -1,228 +1,165 @@
-/*
- * iot_packet.c
- *
- *  Created on: Aug 5, 2020
- *      Author: mcelr
- */
-
-#include "../include/iot_packet.h"
-
-uint8_t current_packet_buffer[sizeof(uint32_t)];
-
-uint8_t total_packet_buffer[sizeof(uint32_t)];
+#include “iot_packet.h”
 
 uint8_t checksum_buffer[sizeof(uint16_t)];
 
-uint8_t internal_zero_byte_counter = 0;
-
-void IoT_Packet_Reset(struct IoT_PACKET *packet){
-    packet->checksum = 0;
-    packet->current_byte = 0;
-    packet->current_byte_data = 0;
-    packet->current_packet = 0;
-    packet->total_packets = 0;
-    memset(packet->header, 0, HEADER_SIZE);
-    memset(packet->data, 0, DATA_SIZE);
-    internal_zero_byte_counter = 0;
+void ajp_clear_packet(struct IOT_PACKET *p){
+	p->checksum = 0;
+	p->packet_number = 0;
+	p->total_packets = 0;
+	p->status = 0;
+	p->address = 0;
+	memset(data, 0, DATA_SIZE);
+p->internal_byte_counter = 0;
 }
 
-uint8_t IoT_Packet_Get_Byte(struct IoT_PACKET *packet){
-    uint8_t retval = 0;
-
-    switch(packet->current_byte){
-    case 0:
-        retval = packet->payload;
-        packet->current_byte_data = 0;
-        break;
-
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-    case 11:
-    case 12:
-    case 13:
-    case 14:
-    case 15:
-    case 16:
-        retval = packet->header[packet->current_byte - 1];
-        break;
-
-    case 17:
-        memcpy(checksum_buffer, &packet->checksum, sizeof(uint16_t));
-        retval = checksum_buffer[0];
-        break;
-
-    case 18:
-        retval = checksum_buffer[1];
-        break;
-
-    case 19:
-        memcpy(current_packet_buffer, &packet->current_packet, sizeof(uint32_t));
-        retval = current_packet_buffer[0];
-        break;
-
-    case 20:
-        retval = current_packet_buffer[1];
-        break;
-
-    case 21:
-        retval = current_packet_buffer[2];
-        break;
-
-    case 22:
-        retval = current_packet_buffer[3];
-        break;
-        
-    case 23:
-        memcpy(total_packet_buffer, &packet->total_packets, sizeof(uint32_t));
-        retval = total_packet_buffer[0];
-        break;
-
-    case 24:
-        retval = total_packet_buffer[1];
-        break;
-
-    case 25:
-        retval = total_packet_buffer[2];
-        break;
-
-    case 26:
-        retval = total_packet_buffer[3];
-        break;
-
-    default:
-        if (packet->current_byte_data >= DATA_SIZE) {
-            return 0;
-        }
-        retval = packet->data[packet->current_byte_data];
-        packet->current_byte_data += 1;
-        break;
-    }
-
-    packet->current_byte += 1;
-
-    return retval;
+Uint16_t ajp_sizeof_packet(){
+	Return DATA_SIZE + sizeof(uint16_t) + 4*sizeof(uint8_t);
 }
 
-int IoT_Packet_Add_Byte(struct IoT_PACKET *packet, uint8_t byte) {
-    switch (packet->current_byte) {
-    case 0:
-        packet->payload = byte;
-        packet->current_byte_data = 0;
-        break;
+// build packet on transmit send
+uint8_t ajp_get_byte(struct IOT_PACKET *p){
+	uint8_t retval = 0;
+		
+	switch(p->internal_byte_counter){
+	Case 0:
+		memcpy(checksum_buffer, &p->checksum, sizeof(uint16_t));
+		retval = checksum_buffer[0];
+		break;
 
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-    case 11:
-    case 12:
-    case 13:
-    case 14:
-    case 15:
-    case 16:
-        packet->header[packet->current_byte - 1] = byte;
-        break;
+	Case 1:
+		retval = checksum_buffer[1];
+		break;
 
-    case 17:
-        checksum_buffer[0] = byte;
-        break;
+	Case 2:
+		retval = p->status;
+		break;
 
-    case 18:
-        checksum_buffer[1] = byte;
-        memcpy(&packet->checksum, checksum_buffer, sizeof(uint16_t));
-        break;
+	Case 3:
+		retval = p->address;
+		break;
 
-    case 19:
-        current_packet_buffer[0] = byte;
-        break;
+	Case 4:
+		retval = p->packet_number;
+		break;
+	
+	Case 5:
+		retval = p->total_packets;
+		break;
 
-    case 20:
-        current_packet_buffer[1] = byte;
-        break;
+	default:
+		retval = data[internal_byte_counter - 6]; //6 is checksum + status + address + packet_number + total_packets in bytes
+		if(internal_byte_counter  - 6 >= DATA_SIZE){
+			Return 0;
+		}
+		break;
+	}
 
-    case 21:
-        current_packet_buffer[2] = byte;
-        break;
-
-    case 22:
-        current_packet_buffer[3] = byte;
-        memcpy(&packet->current_packet, current_packet_buffer, sizeof(uint32_t));
-        break;
-
-    case 23:
-        total_packet_buffer[0] = byte;
-        break;
-
-    case 24:
-        total_packet_buffer[1] = byte;
-        break;
-
-    case 25:
-        total_packet_buffer[2] = byte;
-        break;
-
-    case 26:
-        total_packet_buffer[3] = byte;
-        memcpy(&packet->total_packets, total_packet_buffer, sizeof(uint32_t));
-        break;
-
-    default:
-        packet->data[packet->current_byte_data] = byte;
-        packet->current_byte_data += 1;
-
-        if (packet->current_byte_data >= DATA_SIZE) {
-            if(IoT_Packet_Validate(packet)){
-                if(IoT_Packet_Complete_Callback != 0){
-                    IoT_Packet_Complete_Callback(packet);
-                }
-                return IoT_PACKET_COMPLETE;
-            }else{
-                return IoT_PACKET_CHECKSUM_ERROR;
-            }
-        }
-        break;
-    }
-
-    packet->current_byte += 1;
-
-    return IoT_PACKET_PARSING;
+	Internal_byte_counter += 1;
+	Return retval;
 }
 
-uint32_t IoT_Packet_Sizeof(struct IoT_PACKET *data){
-    //This is an optimized version, one could do sizeof(IoT_I2C_PACKET), but this would include excess 0 in the data[]
-    return PACKET_SIZE;
+// reconstruct packet on receiving end
+void ajp_add_byte(struct IOT_PACKET *p, uint8_t byte){
+	Uint8_t retval = 0;
+		
+	switch(p->internal_byte_counter){
+	case 0:
+		checksum_buffer[0] = byte;
+		Break;
+
+	case 1:
+		checksum_buffer[1] = byte;
+		memcpy(&p->checksum, checksum_buffer, sizeof(uint16_t));
+		Break;
+
+	case 2:
+		p->status = byte;
+		break;
+
+	case 3:
+		p->address = byte;
+		break;
+
+	case 4:
+		p->packet_number = byte
+		break;
+	
+	case 5:
+		p->total_packets = byte;
+		break;
+
+	default:
+		data[internal_byte_counter - 6] = byte; //6 is checksum + status + address + packet_number + total_packets in bytes
+		if(internal_byte_counter  - 6 >= DATA_SIZE){
+			Return; //error, really not good
+		}
+		break;
+	}
+
+Internal_byte_counter += 1;
 }
 
-uint16_t IoT_Packet_Generate_Checksum(struct IoT_PACKET *packet, uint8_t store){
-    uint16_t tmp_crc = IoT_Checksum_CRC16((char*)packet->data, DATA_SIZE);
-    if(store){
-        packet->checksum = tmp_crc;
-    }
-    return tmp_crc;
+unsigned short ajp_checksum(struct IOT_PACKET *p, bool store){
+	uint16_t sum = 0;
+	for(int i = 0; i < ajp_sizeof_packet(); i++){
+uint8_t retval = ajp_get_byte(p);
+if(i == 0 || i == 1){
+	//skip, these are the checksum bytes
+}else{
+	sum += retval;
+}
+	}
+
+	if(store){
+		p->checksum = sum;
+	}
+
+	return sum;
 }
 
-uint8_t IoT_Packet_Validate(struct IoT_PACKET *packet){
-    uint16_t tmp_crc = IoT_Packet_Generate_Checksum(packet, 0);
-    if(tmp_crc == packet->checksum){
-        return 1;
-    }else{
-        return 0;
-    }
+
+// begin transaction
+// start order
+// send hello
+// wait for acknowledgement
+// return 0 if sucessful, 1 if timeout
+int ajp_beginTransaction(int totalPackets)
+{
+	Int retval; 
+	//struct IOT_PACKET pack;
+	//Struct IOT_PACKET * p = &pack; 
+	HC12_ReadAllInput();
+//ajp_clear_packet(p);
+	// send hello
+UART1_OutChar(AJP_HELLO); 
+	// wait for an acknowledge for some time
+Char in;
+Count responseWait = 0;  
+// delay 10 ms
+In = UART1_InCharNonBlock()
+while(in == 0 && responseWait < RESPONSE_TIMEOUT){
+	// delay 10 ms
+	responseWait += 10;
+In = UART1_InCharNonBlock();
+} 
+
+// evaluate listening
+if(in == 0 || responseWait >= RESPONSE_TIMEOUT){
+	UART1_OutChar(AJP_ERROR);
+	retval = -1; 
+}
+else if(in == AJP_HELLO){
+	UART1_OutChar(AJP_ACKNOWLEDGE);
+	retval = 0; 
+} 
+Else {
+	// left separate for potentially other types of error
+	UART1_OutChar(AJP_ERROR);
+	retval = -2; 
 }
 
+Return retval; 
+	
+}
 
 

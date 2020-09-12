@@ -22,7 +22,15 @@ int main(int argc, char **argv){
     for(int i = 0; i < IoT_Packet_Sizeof(&p1); i++){
         //Send data here
         uint8_t pbyte = IoT_Packet_Get_Byte(&p1);
-        IoT_Packet_Add_Byte(&p2, pbyte);
+
+        //get data here
+        enum  IoT_PACKET_ADD_BYTE_CODES retval = IoT_Packet_Add_Byte(&p2, pbyte);
+
+        if(retval == IoT_PACKET_PARSING){
+            //keep going
+        }else{
+            printf("Warning!");
+        }
     }
 
     //p1 and p2 should be the same here
