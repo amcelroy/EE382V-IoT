@@ -1,38 +1,45 @@
-#include "../include/iot_packet.h"
+#include <stdio.h>
+#include "iot_packet.h"
 
-void IoT_Packet_Complete_Callback(struct IoT_PACKET *packet){
-    printf("Packet Complete");
+void p2_success(struct IOT_PACKET *p){
+    printf("Success!\r\n");
+}
+
+void p2_error(struct IOT_PACKET *p){
+    printf("Error :(");
 }
 
 int main(int argc, char **argv){
 
-    struct IoT_PACKET p1;
-    struct IoT_PACKET p2;
+    struct IOT_PACKET p1;
+    struct IOT_PACKET p2;
 
-    IoT_Packet_Reset(&p2);
-    IoT_Packet_Reset(&p1);
+    ajp_clear_packet(&p1);
+    ajp_clear_packet(&p2);
 
-    memcpy(p1.header, "command", strlen("command"));
-    memcpy(p1.data, "Hello World!", strlen("Hello World!"));
+    p2.success_callback = p2_success;
+    p2.error_callback = p2_error;
+
+    p1.address = 1;
+    p1.packet_number = 1;
     p1.total_packets = 1;
-    p1.current_packet = 1;
-    
-    IoT_Packet_Generate_Checksum(&p1, 1);
+    p1.status = AJP_HELLO;
+    ajp_checksum(&p1, true);
 
-    for(int i = 0; i < IoT_Packet_Sizeof(&p1); i++){
-        //Send data here
-        uint8_t pbyte = IoT_Packet_Get_Byte(&p1);
+    uint8_t tx_channel[ajp_sizeof_packet()]; //Demo transmission channel
 
-        //get data here
-        enum  IoT_PACKET_ADD_BYTE_CODES retval = IoT_Packet_Add_Byte(&p2, pbyte);
-
-        if(retval == IoT_PACKET_PARSING){
-            //keep going
-        }else{
-            printf("Warning!");
-        }
+    for(int i = 0; i < ajp_sizeof_packet(); i++){
+        uint8_t packet_byte = ajp_get_byte(&p1);
+        tx_channel[i] = packet_byte;
     }
 
+    for(int i = 0; i < ajp_sizeof_packet(); i++){
+        ajp_add_byte(&p2, tx_channel[i]);
+    }
+
+    if(ajp_checksum(&p2, false) == ajp_checksum(&p1, false)){
+        printf("Checksums is the same for p1 and p2 \r\n");
+    }
     //p1 and p2 should be the same here
     
     

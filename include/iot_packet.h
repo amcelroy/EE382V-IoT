@@ -1,9 +1,15 @@
 #ifndef __IOT_PACKET_H__
 #define __IOT_PACKET_H__
 
+#include <stdint.h>
+#include <stdbool.h>
+#include <string.h>
+
+#ifdef __TI_COMPILER_VERSION__
 #include "../inc/SysTickInts.h"
 #include "../inc/Clock.h"
 #include "../inc/UART1.h"
+#endif
 
 #define DATA_SIZE 64
 
@@ -24,6 +30,12 @@
 
 #define RESPONSE_TIMEOUT 1000 // 1 second
 
+#define HEADER_SIZE 6 //Everything except data and internal byte counter
+
+typedef void (*packet_received_success)(struct IOT_PACKET*);
+
+typedef void (*packet_received_error)(struct IOT_PACKET*);
+
 struct IOT_PACKET {
 	uint16_t checksum;
 	uint8_t status; 
@@ -32,6 +44,8 @@ struct IOT_PACKET {
 	uint8_t total_packets;
 	uint8_t data[DATA_SIZE]; 
 	uint16_t internal_byte_counter;
+    packet_received_success success_callback;
+    packet_received_error error_callback;
 };
 
 
@@ -45,14 +59,16 @@ int ajp_beginTransaction(int totalPackets);
 
 void ajp_clear_packet(struct IOT_PACKET *p);
 
+void ajp_reset_packet_counter(struct IOT_PACKET *p);
+
 uint8_t ajp_get_byte(struct IOT_PACKET *p);
 
 void ajp_add_byte(struct IOT_PACKET *p, uint8_t byte);
 unsigned short ajp_checksum(struct IOT_PACKET *p, bool store);
 
-Uint16_t ajp_sizeof_packet();
+uint16_t ajp_sizeof_packet();
 
-void ajp_write(stuct IOT_PACKET *p, uint8_t * data, uint32_t dataLength ); 
+void ajp_write(struct IOT_PACKET *p, uint8_t * data, uint32_t dataLength ); 
 
 // end transaction
 // end order
