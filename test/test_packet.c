@@ -24,7 +24,9 @@ int main(int argc, char **argv){
     p1.packet_number = 1;
     p1.total_packets = 1;
     p1.status = AJP_HELLO;
-    ajp_checksum(&p1, true);
+    uint16_t crc_pre = ajp_checksum(&p1, true);
+    memcpy(p1.data, "Hello World!", strlen("Hello World!"));
+    uint16_t crc_post = ajp_checksum(&p1, true);
 
     uint8_t tx_channel[ajp_sizeof_packet()]; //Demo transmission channel
 
