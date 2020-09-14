@@ -362,6 +362,7 @@ static void ajp_sendPacket(struct IOT_PACKET *p)
     // two's complement for the checksum
     //p->checksum = (p->checksum ^ 0xFF) + 1;
     // send checksum (length of 2 words)
+    sendptr = &(p->checksum);
     for(i = 0; i < 2; i++)
     {
         UART1_OutChar(*sendptr);

@@ -11,8 +11,13 @@
 #include "../inc/UART1.h"
 #endif
 
-#define SOURCE_ID 1 // source address
+#define IOT_SEND
 
+#ifdef IOT_SEND
+#define SOURCE_ID 1 // source address
+#else
+#define SOURCE_ID 2
+#endif
 // size of data allowed in a single packet
 #define DATA_SIZE 64
 

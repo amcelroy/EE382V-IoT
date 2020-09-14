@@ -163,7 +163,8 @@ void HC12_Init(uint32_t baud){
  * main.c
  */
 
-void sendTest(void){
+void sendTest(void)
+{
     int i;
     uint8_t destination = 0x02;
     int totalSize = 26*4;
@@ -200,16 +201,19 @@ void main(void){
   HC12_Init(UART1_BAUD_9600);
 
 
-  int error = 0;
-  int drop = 0;
-  char in;
+  //int error = 0;
+  //int drop = 0;
+  //char in;
 
   while(1){
      //WaitForInterrupt();
+#ifdef IOT_SEND
+      sendTest();
+#else
+      receiveTest();
+#endif
 
-     int error = 0;
-     int drop = 0;
-     char in;
+     /*
      int i;
      time_t start = time(0);
      for(i = 0; i < 500; i ++){
@@ -240,6 +244,8 @@ void main(void){
      //HC12_ReadForever();
 
      // foreground thread
+      *
+      */
 
     MainCount++;
     }
