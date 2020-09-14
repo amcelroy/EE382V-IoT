@@ -1,6 +1,6 @@
 # FIXED
 
-LaunchPad.obj: C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/LaunchPad.c
+LaunchPad.obj: C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/LaunchPad.c
 LaunchPad.obj: C:/ti/ccs1010/ccs/ccs_base/arm/include/msp.h
 LaunchPad.obj: C:/ti/ccs1010/ccs/ccs_base/arm/include/msp432p401r.h
 LaunchPad.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdint.h
@@ -20,7 +20,7 @@ LaunchPad.obj: C:/ti/ccs1010/ccs/ccs_base/arm/include/CMSIS/cmsis_compiler.h
 LaunchPad.obj: C:/ti/ccs1010/ccs/ccs_base/arm/include/CMSIS/cmsis_ccs.h
 LaunchPad.obj: C:/ti/ccs1010/ccs/ccs_base/arm/include/system_msp432p401r.h
 
-C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/LaunchPad.c: 
+C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/LaunchPad.c: 
 C:/ti/ccs1010/ccs/ccs_base/arm/include/msp.h: 
 C:/ti/ccs1010/ccs/ccs_base/arm/include/msp432p401r.h: 
 C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdint.h: 

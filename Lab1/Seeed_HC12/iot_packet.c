@@ -200,6 +200,9 @@ struct IOT_TRANSACTION * AJP_beginTransmittal(uint8_t destination, int totalSize
   // should only send header and checksum
   ajp_sendPacket(p);
 
+  // get ready to send the next packet
+  ajp_incrementPacket(p);
+
   // wait for an acknowledge for some time
   if(ajp_waitForAcknowledgment(t) == 0){
       return t;
@@ -362,7 +365,7 @@ static void ajp_sendPacket(struct IOT_PACKET *p)
     // two's complement for the checksum
     //p->checksum = (p->checksum ^ 0xFF) + 1;
     // send checksum (length of 2 words)
-    sendptr = &(p->checksum);
+    sendptr = (uint8_t*) &(p->checksum);
     for(i = 0; i < 2; i++)
     {
         UART1_OutChar(*sendptr);
@@ -403,8 +406,8 @@ void ajp_readAllInput(void){uint8_t in;
 static int ajp_waitForAcknowledgment(struct IOT_TRANSACTION * t)
 {
     int retval;
-
-    if(!ajp_waitForIncomingPacket(true, 1000) == 0)
+    // for now, doing away with timeout
+    if(!ajp_waitForIncomingPacket(false, 0) == 0)
     {
         // here we have an invalid packet or it timed out.
         while(1);
@@ -439,6 +442,9 @@ static int ajp_waitForIncomingPacket(bool timeout, int timeout_val)
             }
             in = UART1_InCharNonBlock();
         }
+        if(time >= timeout_val){
+            return -2;
+        }
     }
     else {
         in = UART1_InChar();
@@ -461,7 +467,7 @@ static int ajp_evaluateIncomingPacket(void)
     p->destination = SOURCE_ID;
     checksum += SOURCE_ID;
     // get the header
-    for(ptr = &p->source; ptr <= &p->data_length; ptr++){
+    for(ptr = &(p->source); (ptr < &p->data_length); ptr++){
         *ptr = UART1_InChar();
         checksum += *ptr;
     }
@@ -476,10 +482,11 @@ static int ajp_evaluateIncomingPacket(void)
     }
 
     // construct the 16 bit checksum.
-    uint16_t sent_checksum = UART1_InChar() << 8;
-    sent_checksum += UART1_InChar();
+    // lsb sent first.
+    p->checksum = UART1_InChar();
+    p->checksum += UART1_InChar() << 8;
 
-    if(checksum == sent_checksum){
+    if(checksum == p->checksum){
         // this packet is valid
         validPacket = true;
         return 0;

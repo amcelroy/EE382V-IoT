@@ -1,6 +1,6 @@
 # FIXED
 
-CortexM.obj: C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/CortexM.c
+CortexM.obj: C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/CortexM.c
 CortexM.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdint.h
 CortexM.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/_ti_config.h
 CortexM.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/linkage.h
@@ -12,7 +12,7 @@ CortexM.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/mach
 CortexM.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/machine/_stdint.h
 CortexM.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/sys/_stdint.h
 
-C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/CortexM.c: 
+C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/CortexM.c: 
 C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdint.h: 
 C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/_ti_config.h: 
 C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/linkage.h: 

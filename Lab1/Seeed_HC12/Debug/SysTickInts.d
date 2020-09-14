@@ -1,6 +1,6 @@
 # FIXED
 
-SysTickInts.obj: C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/SysTickInts.c
+SysTickInts.obj: C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/SysTickInts.c
 SysTickInts.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdint.h
 SysTickInts.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/_ti_config.h
 SysTickInts.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/linkage.h
@@ -20,7 +20,7 @@ SysTickInts.obj: C:/ti/ccs1010/ccs/ccs_base/arm/include/CMSIS/cmsis_compiler.h
 SysTickInts.obj: C:/ti/ccs1010/ccs/ccs_base/arm/include/CMSIS/cmsis_ccs.h
 SysTickInts.obj: C:/ti/ccs1010/ccs/ccs_base/arm/include/system_msp432p401r.h
 
-C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/SysTickInts.c: 
+C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/SysTickInts.c: 
 C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdint.h: 
 C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/_ti_config.h: 
 C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/linkage.h: 

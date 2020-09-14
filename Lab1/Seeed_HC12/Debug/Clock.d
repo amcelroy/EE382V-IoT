@@ -1,6 +1,6 @@
 # FIXED
 
-Clock.obj: C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/Clock.c
+Clock.obj: C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/Clock.c
 Clock.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdint.h
 Clock.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/_ti_config.h
 Clock.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/linkage.h
@@ -20,7 +20,7 @@ Clock.obj: C:/ti/ccs1010/ccs/ccs_base/arm/include/CMSIS/cmsis_compiler.h
 Clock.obj: C:/ti/ccs1010/ccs/ccs_base/arm/include/CMSIS/cmsis_ccs.h
 Clock.obj: C:/ti/ccs1010/ccs/ccs_base/arm/include/system_msp432p401r.h
 
-C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/Clock.c: 
+C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/Clock.c: 
 C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdint.h: 
 C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/_ti_config.h: 
 C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/linkage.h: 

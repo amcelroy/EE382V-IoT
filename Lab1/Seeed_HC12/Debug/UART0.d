@@ -1,6 +1,6 @@
 # FIXED
 
-UART0.obj: C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/UART0.c
+UART0.obj: C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/UART0.c
 UART0.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdint.h
 UART0.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/_ti_config.h
 UART0.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/linkage.h
@@ -13,7 +13,7 @@ UART0.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/machin
 UART0.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/sys/_stdint.h
 UART0.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdio.h
 UART0.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdarg.h
-UART0.obj: C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/UART0.h
+UART0.obj: C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/UART0.h
 UART0.obj: C:/ti/ccs1010/ccs/ccs_base/arm/include/msp.h
 UART0.obj: C:/ti/ccs1010/ccs/ccs_base/arm/include/msp432p401r.h
 UART0.obj: C:/ti/ccs1010/ccs/ccs_base/arm/include/msp_compatibility.h
@@ -24,7 +24,7 @@ UART0.obj: C:/ti/ccs1010/ccs/ccs_base/arm/include/CMSIS/cmsis_ccs.h
 UART0.obj: C:/ti/ccs1010/ccs/ccs_base/arm/include/system_msp432p401r.h
 UART0.obj: C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/file.h
 
-C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/UART0.c: 
+C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/UART0.c: 
 C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdint.h: 
 C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/_ti_config.h: 
 C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/linkage.h: 
@@ -37,7 +37,7 @@ C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/machine/_stdint.h
 C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/sys/_stdint.h: 
 C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdio.h: 
 C:/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/include/stdarg.h: 
-C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/UART0.h: 
+C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/UART0.h: 
 C:/ti/ccs1010/ccs/ccs_base/arm/include/msp.h: 
 C:/ti/ccs1010/ccs/ccs_base/arm/include/msp432p401r.h: 
 C:/ti/ccs1010/ccs/ccs_base/arm/include/msp_compatibility.h: 

@@ -178,7 +178,7 @@ void sendTest(void)
 
 void receiveTest(void)
 {
-    char in;
+    uint8_t in;
     struct IOT_TRANSACTION * t;
     t = AJP_listen();
 

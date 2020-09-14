@@ -11,7 +11,7 @@
 #include "../inc/UART1.h"
 #endif
 
-#define IOT_SEND
+//#define IOT_SEND
 
 #ifdef IOT_SEND
 #define SOURCE_ID 1 // source address

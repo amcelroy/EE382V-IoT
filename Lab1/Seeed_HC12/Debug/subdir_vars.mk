@@ -9,13 +9,13 @@ CMD_SRCS += \
 ../msp432p401r.cmd 
 
 C_SRCS += \
-C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/Clock.c \
-C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/CortexM.c \
-C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/LaunchPad.c \
+C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/Clock.c \
+C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/CortexM.c \
+C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/LaunchPad.c \
 ../Seeed_HC12main.c \
-C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/SysTickInts.c \
-C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/UART0.c \
-C:/Users/Jackson\ Farley/Documents/IOT/MSP432/inc/UART1.c \
+C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/SysTickInts.c \
+C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/UART0.c \
+C:/Users/Jackson\ Farley/Documents/IOT/EE382V-IoT/Lab1/inc/UART1.c \
 ../iot_packet.c \
 ../startup_msp432p401r_ccs.c \
 ../system_msp432p401r.c 
@@ -69,13 +69,13 @@ C_DEPS__QUOTED += \
 "system_msp432p401r.d" 
 
 C_SRCS__QUOTED += \
-"C:/Users/Jackson Farley/Documents/IOT/MSP432/inc/Clock.c" \
-"C:/Users/Jackson Farley/Documents/IOT/MSP432/inc/CortexM.c" \
-"C:/Users/Jackson Farley/Documents/IOT/MSP432/inc/LaunchPad.c" \
+"C:/Users/Jackson Farley/Documents/IOT/EE382V-IoT/Lab1/inc/Clock.c" \
+"C:/Users/Jackson Farley/Documents/IOT/EE382V-IoT/Lab1/inc/CortexM.c" \
+"C:/Users/Jackson Farley/Documents/IOT/EE382V-IoT/Lab1/inc/LaunchPad.c" \
 "../Seeed_HC12main.c" \
-"C:/Users/Jackson Farley/Documents/IOT/MSP432/inc/SysTickInts.c" \
-"C:/Users/Jackson Farley/Documents/IOT/MSP432/inc/UART0.c" \
-"C:/Users/Jackson Farley/Documents/IOT/MSP432/inc/UART1.c" \
+"C:/Users/Jackson Farley/Documents/IOT/EE382V-IoT/Lab1/inc/SysTickInts.c" \
+"C:/Users/Jackson Farley/Documents/IOT/EE382V-IoT/Lab1/inc/UART0.c" \
+"C:/Users/Jackson Farley/Documents/IOT/EE382V-IoT/Lab1/inc/UART1.c" \
 "../iot_packet.c" \
 "../startup_msp432p401r_ccs.c" \
 "../system_msp432p401r.c" 
