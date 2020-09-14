@@ -1,0 +1,1 @@
+"./Clock.obj" "./CortexM.obj" "./LaunchPad.obj" "./Seeed_HC12main.obj" "./SysTickInts.obj" "./UART0.obj" "./UART1.obj" "./iot_packet.obj" "./startup_msp432p401r_ccs.obj" "./system_msp432p401r.obj" "../msp432p401r.cmd" -llibc.a 
