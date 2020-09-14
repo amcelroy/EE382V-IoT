@@ -167,25 +167,25 @@ void sendTest(void){
     int i;
     uint8_t destination = 0x02;
     int totalSize = 26*4;
-    struct IOT_TRANSACTION * t = ajp_beginTransmittal(destination, totalSize);
+    struct IOT_TRANSACTION * t = AJP_beginTransmittal(destination, totalSize);
     for(i = 0; i < 26*4; i++)
     {
-        ajp_sendByte(t, 'A'+i%26);
+        AJP_sendByte(t, 'A'+i%26);
     }
-    ajp_endTransmittal(t);
+    AJP_endTransmittal(t);
 }
 
 void receiveTest(void)
 {
     char in;
     struct IOT_TRANSACTION * t;
-    t = ajp_listen();
+    t = AJP_listen();
 
-    while(ajp_receiveByte(t,&in) == 0){
+    while(AJP_receiveByte(t,&in) == 0){
         printf("%c\r\n",in);
     }
 
-    ajp_acknowledge(t);
+    AJP_acknowledge(t);
 
 }
 

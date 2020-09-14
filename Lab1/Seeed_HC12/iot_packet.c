@@ -154,7 +154,7 @@ unsigned short ajp_checksum(struct IOT_PACKET *p, bool store){
 // return 0 if sucessful, 1 if timeout
 
 // total size can be 0 for a stream!
-struct IOT_TRANSACTION * ajp_beginTransmittal(uint8_t destination, int totalSize)
+struct IOT_TRANSACTION * AJP_beginTransmittal(uint8_t destination, int totalSize)
 {
   // clear all that input good good
   ajp_readAllInput();
@@ -209,7 +209,7 @@ struct IOT_TRANSACTION * ajp_beginTransmittal(uint8_t destination, int totalSize
   }
 }
 
-int ajp_endTransmittal(struct IOT_TRANSACTION * t)
+int AJP_endTransmittal(struct IOT_TRANSACTION * t)
 {
     // send any data remaining
     struct IOT_PACKET * p = t->packet;
@@ -231,7 +231,7 @@ int ajp_endTransmittal(struct IOT_TRANSACTION * t)
     return 0;
 }
 
-void ajp_sendByte(struct IOT_TRANSACTION * t, char datum)
+void AJP_sendByte(struct IOT_TRANSACTION * t, char datum)
 {
     struct IOT_PACKET * p = t->packet;
     if(p != NULL  && t->isTransmitter){
@@ -254,7 +254,7 @@ void ajp_sendByte(struct IOT_TRANSACTION * t, char datum)
     }
 }
 
-struct IOT_TRANSACTION * ajp_listen(void)
+struct IOT_TRANSACTION * AJP_listen(void)
 {
     ajp_readAllInput();
 
@@ -288,7 +288,7 @@ struct IOT_TRANSACTION * ajp_listen(void)
     return t;
 }
 
-int ajp_receiveByte(struct IOT_TRANSACTION *t, uint8_t * datum)
+int AJP_receiveByte(struct IOT_TRANSACTION *t, uint8_t * datum)
 {
     // since everything is sequential, we can simply read through
     // the packet if it's valid.
@@ -319,7 +319,7 @@ int ajp_receiveByte(struct IOT_TRANSACTION *t, uint8_t * datum)
 }
 
 
-void ajp_acknowledge(struct IOT_TRANSACTION * t)
+void AJP_acknowledge(struct IOT_TRANSACTION * t)
 {
     struct IOT_PACKET * p = t->packet;
     ajp_clearPacket(p);
@@ -331,6 +331,7 @@ void ajp_acknowledge(struct IOT_TRANSACTION * t)
     // returns an acknowledgement
     ajp_sendPacket(p);
 }
+
 /*
  * PRIVATE FUNCTIONS
  * */

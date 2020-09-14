@@ -74,9 +74,26 @@ struct IOT_TRANSACTION {
 // wait for acknowledgement
 // return 0 if sucessful, 1 if timeout
 
-struct IOT_TRANSACTION * ajp_beginTransmittal(uint8_t destination, int totalSize);
 
-int ajp_endTransmittal(struct IOT_TRANSACTION * t);
+
+// Public Functions (ajp is capitalized)
+
+// transmitting
+struct IOT_TRANSACTION * AJP_beginTransmittal(uint8_t destination, int totalSize);
+
+struct IOT_TRANSACTION * AJP_listen();
+
+int    AJP_endTransmittal(struct IOT_TRANSACTION * t);
+
+// sends a single byte as data. The protocol should take care of the rest.
+void AJP_sendByte(struct IOT_TRANSACTION * t, char datum);
+
+// receives a single byte of data. Will return 0 if there's more data to read.
+int AJP_receiveByte(struct IOT_TRANSACTION *t, uint8_t * datum);
+
+// sends an acknowledgment
+void AJP_acknowledge(struct IOT_TRANSACTION * t);
+
 
 
 void ajp_clear_packet(struct IOT_PACKET *p);
@@ -101,13 +118,6 @@ void ajp_write(struct IOT_PACKET *p, uint8_t * data, uint32_t dataLength);
 // listen for incoming packets.
 // upon receipt of hello, send acknowledgement
 // upon receipt of anything else, send reset/error message
-struct IOT_TRANSACTION * ajp_listen();
 
-// sends a single byte as data. The protocol should take care of the rest.
-void ajp_sendByte(struct IOT_TRANSACTION * t, char datum);
-
-int ajp_receiveByte(struct IOT_TRANSACTION *t, uint8_t * datum);
-
-void ajp_acknowledge(struct IOT_TRANSACTION * t);
 
 #endif
