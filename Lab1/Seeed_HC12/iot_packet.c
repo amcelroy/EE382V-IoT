@@ -437,6 +437,7 @@ static int ajp_waitForAcknowledgment(struct IOT_TRANSACTION * t)
 static int ajp_waitForIncomingPacket(bool timeout, int timeout_val)
 {
     char in;
+    int bytesDropped = 0;
     if(timeout){
         int time = 0;
         in = UART1_InCharNonBlock();
@@ -447,6 +448,7 @@ static int ajp_waitForIncomingPacket(bool timeout, int timeout_val)
                 time++;
             }
             in = UART1_InCharNonBlock();
+            bytesDropped++;
         }
         if(time >= timeout_val){
             return -2;
@@ -456,6 +458,7 @@ static int ajp_waitForIncomingPacket(bool timeout, int timeout_val)
         in = UART1_InChar();
         while(in != SOURCE_ID){
             in = UART1_InChar();
+            bytesDropped++;
         }
     }
     // once a message addressed to us is identified
