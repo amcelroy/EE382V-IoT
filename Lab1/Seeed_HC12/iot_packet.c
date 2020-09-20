@@ -471,7 +471,7 @@ static int ajp_evaluateIncomingPacket(void)
     p->destination = SOURCE_ID;
     checksum += SOURCE_ID;
     // get the header
-    for(ptr = &(p->source); (ptr < &p->data_length); ptr++){
+    for(ptr = &(p->source); (ptr <= &p->data_length); ptr++){
         *ptr = UART1_InChar();
         checksum += *ptr;
     }
@@ -489,10 +489,12 @@ static int ajp_evaluateIncomingPacket(void)
     // switching to 8 - bit checksum
     // msb sent first. Changed for some reason?
     // p->checksum = UART1_InChar() << 8;
-    p->checksum += UART1_InChar();
+    p->checksum = UART1_InChar();
+
+    uint8_t checksum_calculation = checksum + p->checksum;
 
     // check for message validity
-    if(checksum + p->checksum == 0){
+    if(checksum_calculation == 0x00){
         // this packet is valid
         validPacket = true;
         return 0;
