@@ -363,14 +363,18 @@ static void ajp_sendPacket(struct IOT_PACKET *p)
     }
 
     // two's complement for the checksum
-    //p->checksum = (p->checksum ^ 0xFF) + 1;
+    p->checksum = (p->checksum ^ 0xFF) + 1;
     // send checksum (length of 2 words)
+    /* Old way of sending 16-bit checksum
     sendptr = (uint8_t*) &(p->checksum);
     for(i = 0; i < 2; i++)
     {
         UART1_OutChar(*sendptr);
         sendptr++;
     }
+    */
+    UART1_OutChar(p->checksum);
+
 }
 
 static void ajp_clearPacket(struct IOT_PACKET *p){
@@ -461,7 +465,7 @@ static int ajp_evaluateIncomingPacket(void)
     // if we've made it to here, we know that the
     // destination address for a message is us.
     struct IOT_PACKET * p = &Packet_Receive;
-    uint16_t checksum = 0;
+    uint8_t checksum = 0;
     int i;
     uint8_t * ptr;
     p->destination = SOURCE_ID;
@@ -482,11 +486,13 @@ static int ajp_evaluateIncomingPacket(void)
     }
 
     // construct the 16 bit checksum.
-    // lsb sent first.
-    p->checksum = UART1_InChar();
-    p->checksum += UART1_InChar() << 8;
+    // switching to 8 - bit checksum
+    // msb sent first. Changed for some reason?
+    // p->checksum = UART1_InChar() << 8;
+    p->checksum += UART1_InChar();
 
-    if(checksum == p->checksum){
+    // check for message validity
+    if(checksum + p->checksum == 0){
         // this packet is valid
         validPacket = true;
         return 0;

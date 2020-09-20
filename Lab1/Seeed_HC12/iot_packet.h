@@ -11,7 +11,7 @@
 #include "../inc/UART1.h"
 #endif
 
-//#define IOT_SEND
+#define IOT_SEND
 
 #ifdef IOT_SEND
 #define SOURCE_ID 1 // source address
@@ -56,7 +56,7 @@ struct IOT_PACKET {
 	                     // less than DATA_SIZE
 	// DATA_SIZE bounded by 255 b/c of data_length precision
 	uint8_t data[DATA_SIZE]; 
-	uint16_t checksum;
+	uint8_t checksum; // 8 - bit two's complement checksum.
 
 	uint16_t internal_byte_counter;
 
