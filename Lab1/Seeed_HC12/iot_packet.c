@@ -217,6 +217,7 @@ int AJP_endTransmittal(struct IOT_TRANSACTION * t)
     // send any data remaining
     struct IOT_PACKET * p = t->packet;
     if(p->data_length > 0){
+        Clock_Delay1ms(40); // DEBUG, empirically needs to be big.
         ajp_sendPacket(p);
     }
 
@@ -245,6 +246,7 @@ void AJP_sendByte(struct IOT_TRANSACTION * t, char datum)
         if(p->data_length == DATA_SIZE)
         {
             // packet full
+            Clock_Delay1ms(40); // DEBUG
             ajp_sendPacket(p);
             // go to the next packet
             ajp_incrementPacket(p);

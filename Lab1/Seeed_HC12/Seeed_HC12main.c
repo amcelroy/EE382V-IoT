@@ -169,17 +169,21 @@ void sendTest(void)
     uint8_t destination = 0x02;
     int totalSize = 26*4;
     struct IOT_TRANSACTION * t = AJP_beginTransmittal(destination, totalSize);
+    printf("Successful connection. Begin sending data\r\n");
     for(i = 0; i < 26*4; i++)
     {
         AJP_sendByte(t, 'A'+i%26);
     }
+    printf("Data Sent. Awaiting acknowledgement\r\n");
     AJP_endTransmittal(t);
+    printf("\r\nFinished!\r\n\r\n");
 }
 
 void receiveTest(void)
 {
     uint8_t in;
     struct IOT_TRANSACTION * t;
+    printf("Awaiting Connection.\r\n");
     t = AJP_listen();
 
     while(AJP_receiveByte(t,&in) == 0){
@@ -187,6 +191,7 @@ void receiveTest(void)
     }
 
     AJP_acknowledge(t);
+    printf("\r\nFinished!\r\n");
 
 }
 
