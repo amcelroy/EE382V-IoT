@@ -44,9 +44,10 @@
 
 #define HEADER_SIZE 6 //Everything except data and internal byte counter
 
+/*
 typedef void (*packet_received_success)(struct IOT_PACKET*);
 typedef void (*packet_received_error)(struct IOT_PACKET*);
-
+*/
 
 
 struct IOT_PACKET {

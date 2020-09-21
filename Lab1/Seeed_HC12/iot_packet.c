@@ -389,9 +389,11 @@ static void ajp_clearPacket(struct IOT_PACKET *p){
     p->destination = 0;
     p->source = 0;
     memset(p->data, 0, DATA_SIZE);
+    /*
     p->success_callback = 0;
     p->error_callback = 0;
     p->internal_byte_counter = 0;
+    */
 }
 
 static void ajp_incrementPacket(struct IOT_PACKET *p)

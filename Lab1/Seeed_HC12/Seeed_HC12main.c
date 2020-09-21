@@ -205,13 +205,14 @@ void main(void){
   printf("\nAJP Protocol Demonstration\n");
   HC12_Init(UART1_BAUD_9600);
 
-  char in;
+  //char in;
 
   while(1){
      //WaitForInterrupt();
 #ifdef CONSOLE_DEBUG
      printf("\r\n\nPress any key to run test: \r\n");
-     in = UART0_InChar();
+     UART0_InChar();
+
 #endif
 
 #ifdef IOT_SEND
