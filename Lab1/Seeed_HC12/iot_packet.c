@@ -11,6 +11,7 @@ static bool validPacket = false;
 // packet helper functions
 static void ajp_sendPacket(struct IOT_PACKET *p);
 static void ajp_clearPacket(struct IOT_PACKET *p);
+static void ajp_clearTransaction(struct IOT_TRANSACTION *t);
 static void ajp_incrementPacket(struct IOT_PACKET *p);
 static int  ajp_evaluateIncomingPacket(void);
 static void ajp_readAllInput(void);
@@ -162,6 +163,7 @@ struct IOT_TRANSACTION * AJP_beginTransmittal(uint8_t destination, int totalSize
   ajp_readAllInput();
 
   struct IOT_TRANSACTION * t = &Transaction;
+  ajp_clearTransaction(t);
   t->isTransmitter = true;
   t->destination = destination;
   // currently sets the transaction packet to the global packet
@@ -266,6 +268,8 @@ struct IOT_TRANSACTION * AJP_listen(void)
     ajp_readAllInput();
 
     struct IOT_TRANSACTION * t = &Transaction;
+    ajp_clearTransaction(t);
+
     t->isTransmitter = false;
     t->destination = 0; // currently unknown
     // currently sets the transaction packet to the global packet
@@ -394,6 +398,15 @@ static void ajp_clearPacket(struct IOT_PACKET *p){
     p->error_callback = 0;
     p->internal_byte_counter = 0;
     */
+}
+
+static void ajp_clearTransaction(struct IOT_TRANSACTION *t){
+    t->packet = 0;
+    t->packet_recv = 0;
+    t->destination = 0;
+    t->packetsReceived = 0;
+    t->size = 0;
+    t->isTransmitter = false;
 }
 
 static void ajp_incrementPacket(struct IOT_PACKET *p)
