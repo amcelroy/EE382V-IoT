@@ -1,7 +1,5 @@
 #include "iot_packet.h"
 
-
-
 // private global variables
 
 static struct IOT_TRANSACTION Transaction;
@@ -21,11 +19,10 @@ static void ajp_readAllInput(void);
 static int ajp_waitForAcknowledgment(struct IOT_TRANSACTION * t);
 static int ajp_waitForIncomingPacket(bool timeout, int timeout_val);
 
-
 uint8_t checksum_buffer[sizeof(uint16_t)];
 
 
-
+/* Deprecated
 uint16_t ajp_sizeof_packet(){
 	return DATA_SIZE + HEADER_SIZE;
 }
@@ -33,7 +30,9 @@ uint16_t ajp_sizeof_packet(){
 void ajp_reset_packet_counter(struct IOT_PACKET *p){
     p->internal_byte_counter = 0;
 }
+*/
 
+/*
 // build packet on transmit send
 uint8_t ajp_tx_get_byte(struct IOT_PACKET *p){
 	uint8_t retval = 0;
@@ -127,7 +126,9 @@ void ajp_rx_add_byte(struct IOT_PACKET *p, uint8_t byte){
         }
     }
 }
+*/
 
+/*
 // create a sum complement checksum:
 // basically add all words (defined here as uint8_t) and store
 // the twos complement.
@@ -136,7 +137,7 @@ void ajp_rx_add_byte(struct IOT_PACKET *p, uint8_t byte){
 unsigned short ajp_checksum(struct IOT_PACKET *p, bool store){
 	uint16_t sum = 0;
     uint8_t *ptr = (uint8_t*)p;
-	for(int i = 2; i < ajp_sizeof_packet(); i++){
+	for(int i = 2; sizeof_packet(); i++){
         sum += (unsigned short)ptr[i];
 	}
 
@@ -146,6 +147,7 @@ unsigned short ajp_checksum(struct IOT_PACKET *p, bool store){
 
 	return sum;
 }
+*/
 
 // begin transaction
 // start order

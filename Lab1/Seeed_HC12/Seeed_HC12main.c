@@ -189,7 +189,7 @@ void receiveTest(void)
     while(AJP_receiveByte(t,&in) == 0){
         printf("%c\r\n",in);
     }
-
+    Clock_Delay1ms(20);
     AJP_acknowledge(t);
     printf("\r\nFinished!\r\n");
 
@@ -202,16 +202,18 @@ void main(void){
   LaunchPad_Init();         // P1.0 is red LED on LaunchPad
   UART0_Initprintf();       // serial port to PC for debugging
   EnableInterrupts();
-  printf("\nSeeed_HC12 example -Valvano\n");
+  printf("\nAJP Protocol Demonstration\n");
   HC12_Init(UART1_BAUD_9600);
 
-
-  //int error = 0;
-  //int drop = 0;
-  //char in;
+  char in;
 
   while(1){
      //WaitForInterrupt();
+#ifdef CONSOLE_DEBUG
+     printf("\r\n\nPress any key to run test: \r\n");
+     in = UART0_InChar();
+#endif
+
 #ifdef IOT_SEND
       sendTest();
 #else
