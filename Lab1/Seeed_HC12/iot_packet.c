@@ -1,7 +1,5 @@
 #include "iot_packet.h"
 
-
-
 // private global variables
 
 static struct IOT_TRANSACTION Transaction;
@@ -13,6 +11,7 @@ static bool validPacket = false;
 // packet helper functions
 static void ajp_sendPacket(struct IOT_PACKET *p);
 static void ajp_clearPacket(struct IOT_PACKET *p);
+static void ajp_clearTransaction(struct IOT_TRANSACTION *t);
 static void ajp_incrementPacket(struct IOT_PACKET *p);
 static int  ajp_evaluateIncomingPacket(void);
 static void ajp_readAllInput(void);
@@ -21,11 +20,10 @@ static void ajp_readAllInput(void);
 static int ajp_waitForAcknowledgment(struct IOT_TRANSACTION * t);
 static int ajp_waitForIncomingPacket(bool timeout, int timeout_val);
 
-
 uint8_t checksum_buffer[sizeof(uint16_t)];
 
 
-
+/* Deprecated
 uint16_t ajp_sizeof_packet(){
 	return DATA_SIZE + HEADER_SIZE;
 }
@@ -33,7 +31,9 @@ uint16_t ajp_sizeof_packet(){
 void ajp_reset_packet_counter(struct IOT_PACKET *p){
     p->internal_byte_counter = 0;
 }
+*/
 
+/*
 // build packet on transmit send
 uint8_t ajp_tx_get_byte(struct IOT_PACKET *p){
 	uint8_t retval = 0;
@@ -127,7 +127,9 @@ void ajp_rx_add_byte(struct IOT_PACKET *p, uint8_t byte){
         }
     }
 }
+*/
 
+/*
 // create a sum complement checksum:
 // basically add all words (defined here as uint8_t) and store
 // the twos complement.
@@ -136,7 +138,7 @@ void ajp_rx_add_byte(struct IOT_PACKET *p, uint8_t byte){
 unsigned short ajp_checksum(struct IOT_PACKET *p, bool store){
 	uint16_t sum = 0;
     uint8_t *ptr = (uint8_t*)p;
-	for(int i = 2; i < ajp_sizeof_packet(); i++){
+	for(int i = 2; sizeof_packet(); i++){
         sum += (unsigned short)ptr[i];
 	}
 
@@ -146,6 +148,7 @@ unsigned short ajp_checksum(struct IOT_PACKET *p, bool store){
 
 	return sum;
 }
+*/
 
 // begin transaction
 // start order
@@ -160,6 +163,7 @@ struct IOT_TRANSACTION * AJP_beginTransmittal(uint8_t destination, int totalSize
   ajp_readAllInput();
 
   struct IOT_TRANSACTION * t = &Transaction;
+  ajp_clearTransaction(t);
   t->isTransmitter = true;
   t->destination = destination;
   // currently sets the transaction packet to the global packet
@@ -264,6 +268,8 @@ struct IOT_TRANSACTION * AJP_listen(void)
     ajp_readAllInput();
 
     struct IOT_TRANSACTION * t = &Transaction;
+    ajp_clearTransaction(t);
+
     t->isTransmitter = false;
     t->destination = 0; // currently unknown
     // currently sets the transaction packet to the global packet
@@ -387,9 +393,20 @@ static void ajp_clearPacket(struct IOT_PACKET *p){
     p->destination = 0;
     p->source = 0;
     memset(p->data, 0, DATA_SIZE);
+    /*
     p->success_callback = 0;
     p->error_callback = 0;
     p->internal_byte_counter = 0;
+    */
+}
+
+static void ajp_clearTransaction(struct IOT_TRANSACTION *t){
+    t->packet = 0;
+    t->packet_recv = 0;
+    t->destination = 0;
+    t->packetsReceived = 0;
+    t->size = 0;
+    t->isTransmitter = false;
 }
 
 static void ajp_incrementPacket(struct IOT_PACKET *p)

@@ -11,7 +11,10 @@
 #include "../inc/UART1.h"
 #endif
 
+
+#define CONSOLE_DEBUG
 #define IOT_SEND
+
 
 #ifdef IOT_SEND
 #define SOURCE_ID 1 // source address
@@ -41,9 +44,10 @@
 
 #define HEADER_SIZE 6 //Everything except data and internal byte counter
 
+/*
 typedef void (*packet_received_success)(struct IOT_PACKET*);
 typedef void (*packet_received_error)(struct IOT_PACKET*);
-
+*/
 
 
 struct IOT_PACKET {
@@ -58,10 +62,12 @@ struct IOT_PACKET {
 	uint8_t data[DATA_SIZE]; 
 	uint8_t checksum; // 8 - bit two's complement checksum.
 
+	/* Deprecated
 	uint16_t internal_byte_counter;
 
     packet_received_success success_callback;
     packet_received_error error_callback;
+    */
 };
 
 struct IOT_TRANSACTION {
@@ -103,6 +109,7 @@ void AJP_acknowledge(struct IOT_TRANSACTION * t);
 
 void ajp_clear_packet(struct IOT_PACKET *p);
 
+/* Deprecated */
 void ajp_reset_packet_counter(struct IOT_PACKET *p);
 
 uint8_t ajp_tx_get_byte(struct IOT_PACKET *p);
@@ -115,9 +122,6 @@ void ajp_rx_add_byte(struct IOT_PACKET *p, uint8_t byte);
 unsigned short ajp_checksum(struct IOT_PACKET *p, bool store);
 
 uint16_t ajp_sizeof_packet();
-
-void ajp_write(struct IOT_PACKET *p, uint8_t * data, uint32_t dataLength);
-
 
 
 // listen for incoming packets.
