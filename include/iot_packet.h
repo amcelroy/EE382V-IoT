@@ -36,6 +36,12 @@ typedef void (*packet_received_success)(struct IOT_PACKET*);
 
 typedef void (*packet_received_error)(struct IOT_PACKET*);
 
+/**
+ * @brief Struct that stores all of the packet memory in 
+ * contiguous memory.
+ * 
+ */
+
 struct IOT_PACKET {
 	uint16_t checksum;
 	uint8_t status; 
@@ -48,7 +54,73 @@ struct IOT_PACKET {
     packet_received_error error_callback;
 };
 
+/**
+ * @brief Resets memory, counters, and all other
+ * packet information.
+ * 
+ * @param p 
+ */
+void ajp_clear_packet(struct IOT_PACKET *p);
 
+/**
+ * @brief Resets the internal packet counter associated
+ * with adding and getting bytes.
+ * 
+ * @param p 
+ */
+void ajp_reset_packet_counter(struct IOT_PACKET *p);
+
+/**
+ * @brief Gets a byte to the packet and internally
+ * updates the internal byte counter.
+ * 
+ * @param p 
+ * @return uint8_t 
+ */
+uint8_t ajp_get_byte(struct IOT_PACKET *p);
+
+/**
+ * @brief Adds a byte to the packet and internally
+ * updates the internal byte counter.
+ * 
+ * @param p 
+ * @param byte 
+ */
+void ajp_add_byte(struct IOT_PACKET *p, uint8_t byte);
+
+/**
+ * @brief Performs a checksum on: status, address, packet_number, 
+ * total_packets, and the data array.
+ * 
+ * If store is true, the checksum is stored in the checksum location.
+ * 
+ * @param p 
+ * @param store Store the value or just compute it
+ * @return unsigned short Checksum 
+ */
+unsigned short ajp_checksum(struct IOT_PACKET *p, bool store);
+
+/**
+ * @brief Gets the size of the packet, including: checksum, status, 
+ * address, packet_number, total_packets, and the data array.
+ * 
+ * @return uint16_t Size of the packet
+ */
+uint16_t ajp_sizeof_packet();
+
+void ajp_write(struct IOT_PACKET *p, uint8_t * data, uint32_t dataLength ); 
+
+/**
+ * @brief Ends the packet transaction and waits fo acknowledgement
+ * 
+ */
+void ajp_endTransaction();
+
+/**
+ * @brief Listens for incoming packets.
+ * 
+ */
+void ajp_receive(); 
 
 // begin transaction
 // start order
@@ -56,32 +128,6 @@ struct IOT_PACKET {
 // wait for acknowledgement
 // return 0 if sucessful, 1 if timeout
 int ajp_beginTransaction(int totalPackets);
-
-void ajp_clear_packet(struct IOT_PACKET *p);
-
-void ajp_reset_packet_counter(struct IOT_PACKET *p);
-
-uint8_t ajp_get_byte(struct IOT_PACKET *p);
-
-void ajp_add_byte(struct IOT_PACKET *p, uint8_t byte);
-unsigned short ajp_checksum(struct IOT_PACKET *p, bool store);
-
-uint16_t ajp_sizeof_packet();
-
-void ajp_write(struct IOT_PACKET *p, uint8_t * data, uint32_t dataLength ); 
-
-// end transaction
-// end order
-// send goodbye
-// wait for acknowledgement
-void ajp_endTransaction();
-
-
-
-// listen for incoming packets.
-// upon receipt of hello, send acknowledgement
-// upon receipt of anything else, send reset/error message
-void ajp_receive(); 
 
 
 #endif

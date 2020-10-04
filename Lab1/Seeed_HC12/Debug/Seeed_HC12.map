@@ -1,7 +1,7 @@
 ******************************************************************************
-                  TI ARM Linker PC v20.2.1                     
+                  TI ARM Linker Unix v20.2.1                   
 ******************************************************************************
->> Linked Sun Sep 20 14:53:08 2020
+>> Linked Sun Sep 20 15:16:59 2020
 
 OUTPUT FILE NAME:   <Seeed_HC12.out>
 ENTRY POINT SYMBOL: "_c_int00_noargs"  address: 000045cd
@@ -210,7 +210,7 @@ MODULE SUMMARY
 
        Module                        code    ro data   rw data
        ------                        ----    -------   -------
-    .\
+    ./
        iot_packet.obj                1864    0         384    
        UART0.obj                     1760    0         24     
        UART1.obj                     536     0         536    
@@ -224,7 +224,7 @@ MODULE SUMMARY
     +--+-----------------------------+-------+---------+---------+
        Total:                        6750    228       1018   
                                                               
-    C:\ti\ccs1010\ccs\tools\compiler\ti-cgt-arm_20.2.1.LTS\lib\rtsv7M4_T_le_v4SPD16_eabi.lib
+    /Applications/ti/ccs1010/ccs/tools/compiler/ti-cgt-arm_20.2.1.LTS/lib/rtsv7M4_T_le_v4SPD16_eabi.lib
        _printfi.c.obj                4851    0         0      
        defs.c.obj                    0       0         832    
        memory.c.obj                  680     0         16     

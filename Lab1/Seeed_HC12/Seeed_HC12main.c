@@ -62,12 +62,12 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include <time.h>
 #include "msp.h"
 #include "iot_packet.h"
-#include "..\inc\CortexM.h"
-#include "..\inc\SysTickInts.h"
-#include "..\inc\LaunchPad.h"
-#include "..\inc\Clock.h"
-#include "..\inc\UART0.h"
-#include "..\inc\UART1.h"
+#include "../inc/CortexM.h"
+#include "../inc/SysTickInts.h"
+#include "../inc/LaunchPad.h"
+#include "../inc/Clock.h"
+#include "../inc/UART0.h"
+#include "../inc/UART1.h"
 volatile uint32_t Time,MainCount;
 #define LEDOUT (*((volatile uint8_t *)(0x42098040)))
 // P3->OUT is 8-bit port at 0x4000.4C22
