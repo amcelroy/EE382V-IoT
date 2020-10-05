@@ -1,0 +1,29 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "shell",
+			"label": "test_packet.c",
+			"command": "/usr/bin/clang",
+			"args": [
+				"-g",
+				"${file}",
+				"-I",
+				"${workspaceFolder}/include/",
+				"-o",
+				"${workspaceFolder}/test/test_packet.c",
+				"${workspaceFolder}/src/iot_packet.c",
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}

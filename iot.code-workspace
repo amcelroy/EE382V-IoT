@@ -1,0 +1,40 @@
+{
+	"folders": [
+		{
+			"path": "Lab2"
+		},
+		{
+			"path": "src"
+		},
+		{
+			"path": "include"
+		},
+		{
+			"path": "test"
+		},
+		{
+			"name": "EEG",
+			"path": "EEG"
+		}
+	],
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "test_packet",
+				"type": "cppdbg",
+				"request": "launch",
+				"program": "${workspaceFolder:test}/test_packet",
+				"args": [],
+				"stopAtEntry": false,
+				"cwd": "${workspaceFolder:test}",
+				"environment": [],
+				"externalConsole": false,
+				"MIMode": "lldb",
+				"preLaunchTask":{
+					"task": "test_packet",
+				}
+			}
+		]
+	},
+}
