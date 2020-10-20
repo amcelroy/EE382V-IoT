@@ -50,12 +50,12 @@ class _EE382V_IoT_NFC extends State<EE382V_IoT_NFC> {
               Stopwatch sw = new Stopwatch();
               sw.start();
               Uint8List response = await t.transceive(data: Uint8List.fromList(data));
-              var x = new Uint16List.fromList(res)
+
               sw.stop();
 
               setState(() {
                 _microsSeconds = sw.elapsedMicroseconds;
-                _response = Uint16List.fromList(response.toList());
+                _response = response.buffer.asUint16List();
               });
 
               await Future.delayed(Duration(milliseconds: 75));
