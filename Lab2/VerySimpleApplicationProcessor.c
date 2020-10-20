@@ -51,6 +51,7 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include "../inc/AP.h"
 #include "../inc/UART0.h"
 #include "../inc/LaunchPad.h"
+#include "../inc/BSP.h"
 #include "msp.h"
 //--------------------------------------------------
 // 1. Initialize GATT (add services, characteristics, CCCD�s, etc.). See Section 9.5.
@@ -264,8 +265,8 @@ const uint8_t NPI_AddCharValue5[] = {
   0x00,           // GATT no read, no Write Permission
   0x10,0x00,      // GATT notification Properties
   0x00,           // RFU
-  0x00,0x02,      // Maximum length of the attribute value=512
-  0xF4,0xFF,      // UUID
+  0x00,0x04,      // Maximum length of the attribute value=512
+  0xF5,0xFF,      // UUID
   0xA6};          // FCS (calculated by AP_SendMessageResponse)
 const uint8_t NPI_AddCharDescriptor5[] = {
   SOF,13,0x00,    // length = 13
@@ -279,7 +280,7 @@ const uint8_t NPI_AddCharDescriptor5[] = {
   0x0E};          // FCS (calculated by AP_SendMessageResponse)
 
 
-int main(void){ volatile int r1; uint32_t h; uint32_t time=0;
+wint main(void){ volatile int r1; uint32_t h; uint32_t time=0;
   uint8_t responseNeeded;
   DisableInterrupts();
   Clock_Init48MHz();    // processor running at max speed
@@ -353,8 +354,7 @@ int main(void){ volatile int r1; uint32_t h; uint32_t time=0;
   UART0_OutString("\n\rGetStatus");
   r1=AP_SendMessageResponse((uint8_t*)NPI_GetStatusMsg,RecvBuf,RECVSIZE);
 
-
-  r1=AP_S
+  BSP_TempSensor_Init();
 
   while(1){
     time++;
@@ -415,6 +415,21 @@ int main(void){ volatile int r1; uint32_t h; uint32_t time=0;
         OutValue("\n\rSend Count=",Count);
         r1=AP_SendMessageResponse(NPI_SendNotificationIndicationMsg,RecvBuf,RECVSIZE);
       }
+
+      int32_t temp_cnt = 0;
+      int32_t temp_local = 0;
+      BSP_TempSensor_Input(&temp_cnt, &temp_local);
+      NPI_SendNotificationIndicationMsg[1] = 10;
+      NPI_SendNotificationIndicationMsg[7] = Handle5&0x0FF; // handle
+      NPI_SendNotificationIndicationMsg[8] = Handle5>>8;
+      NPI_SendNotificationIndicationMsg[11] = (temp_local >> 0) & 0xff;
+      NPI_SendNotificationIndicationMsg[12] = (temp_local >> 8) & 0xff;
+      NPI_SendNotificationIndicationMsg[13] = (temp_local >> 16) & 0xff;
+      NPI_SendNotificationIndicationMsg[14] = (temp_local >> 24) & 0xff;
+
+      OutValue("\n\rSend Temp=",Count);
+      r1=AP_SendMessageResponse(NPI_SendNotificationIndicationMsg,RecvBuf,RECVSIZE);
+
     }
   }
 }
