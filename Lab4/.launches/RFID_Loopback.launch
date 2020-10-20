@@ -16,6 +16,7 @@
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_PROGRAM.RF430FRL152H.ccxml.TI MSP430 USB1/MSP430" value="${build_artifact:RFID_Loopback}"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_PROJECT.RF430FRL152H.ccxml.TI MSP430 USB1/MSP430" value="RFID_Loopback"/>
 <stringAttribute key="com.ti.ccstudio.debug.debugModel.ATTR_TARGET_CONFIG" value="${target_config_active_default:RFID_Loopback}"/>
+<stringAttribute key="com.ti.ccstudio.debug.debugModel.MRU_PROGRAM.RF430FRL152H.ccxml.TI MSP430 USB1/MSP430" value="C:\Users\mcelr\Desktop\EE382V-IoT\Lab4\Debug\RFID_Loopback.out"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
 <listEntry value="/RFID_Loopback"/>
 </listAttribute>
@@ -27,4 +28,5 @@
 <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
 <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
 </listAttribute>
+<stringAttribute key="org.eclipse.dsf.launch.MEMORY_BLOCKS" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#13;&#10;&lt;memoryBlockExpressionList context=&quot;reserved-for-future-use&quot;/&gt;&#13;&#10;"/>
 </launchConfiguration>

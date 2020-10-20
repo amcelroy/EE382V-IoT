@@ -23,20 +23,26 @@ class _EE382V_IoT_NFC extends State<EE382V_IoT_NFC> {
 
   final int flags = 58; //Hex 0x3A
 
-  bool _emulation = true;
+  bool _emulation = false;
+
+  bool _isAvailable = false;
+
+  Uint16List _response;
 
   void acquireThread() async {
-    bool isAvailable = await NfcManager.instance.isAvailable();
+    _isAvailable = await NfcManager.instance.isAvailable();
     _nfcThread = new Future(() {
       NfcManager.instance.startSession(
         onDiscovered: (NfcTag tag) async {
           NfcV t = NfcV.from(tag);
           _stopThread = false;
 
+          var x = tag.data['nfcv']['identifier'];
+
           List<int> data = new List<int>();
           data.add(flags);
           data.add(32);
-          data.addAll(tag.data['id']);
+          data.addAll(x);
           data.add(0);
 
           while(_stopThread == false){
@@ -44,15 +50,17 @@ class _EE382V_IoT_NFC extends State<EE382V_IoT_NFC> {
               Stopwatch sw = new Stopwatch();
               sw.start();
               Uint8List response = await t.transceive(data: Uint8List.fromList(data));
+              var x = new Uint16List.fromList(res)
               sw.stop();
 
               setState(() {
                 _microsSeconds = sw.elapsedMicroseconds;
+                _response = Uint16List.fromList(response.toList());
               });
 
               await Future.delayed(Duration(milliseconds: 75));
             }on Exception catch (e) {
-              _stopThread = true;
+              //_stopThread = true;
             }
           }
         },
@@ -100,6 +108,8 @@ class _EE382V_IoT_NFC extends State<EE382V_IoT_NFC> {
                 children: [
                   new Text("Acq. Time for 32 Bytes:"),
                   new Text(_microsSeconds.toString()),
+                  new Text("Data"),
+                  new Text(_response.toString())
                 ],
               )
           )

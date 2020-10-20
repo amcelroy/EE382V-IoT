@@ -1,7 +1,7 @@
 #include <msp430.h> 
 
-#define READ_BUFFER_SIZE 12
-#define ADC_BUFFER_SIZE 1024
+#define READ_BUFFER_SIZE 32
+#define BUFFER_SIZE 1024
 
 #define LPM3_GIE() __bis_SR_register(LPM3_bits + GIE)
 
@@ -9,15 +9,15 @@
 
 const unsigned char AFI = 0x50; //Medical
 
-unsigned short buffer_write_index = 0;
-
-unsigned char buffer_last_read_index = 0;
-
-unsigned short transmit_buffer[ADC_BUFFER_SIZE];
+unsigned short transmit_buffer[BUFFER_SIZE];
 
 unsigned char request_transmit = 0;
 
 unsigned short transmit_counter = 0;
+
+unsigned short buffer_write_index = 0;
+
+unsigned short buffer_read_index = 0;
 
 unsigned char flag_inventory = 0;
 unsigned char flag_select = 0;
@@ -174,8 +174,6 @@ int main(void)
     //configure_fram();
     configure_rf();
 
-    buffer_write_index = 0;
-
     __bis_SR_register(LPM0_bits + GIE);
 
                                                         //Chip will be configured in LMP3 Mode, as the Timer used for initiating DAQ
@@ -246,18 +244,12 @@ __inline void parse_iso_15693(){
             RF13MTXF_L = 0x08; //High bandwidth
             unsigned short checksum = 0;
             for(x = 0; x < READ_BUFFER_SIZE; x++){
-                if(buffer_last_read_index >= ADC_BUFFER_SIZE){
-                    buffer_last_read_index = 0;
-                }else{
-                    buffer_last_read_index += 1;
+                if(buffer_read_index + x >= BUFFER_SIZE){
+                    buffer_read_index = 0;
                 }
-
-                if(buffer_last_read_index < buffer_write_index){
-                    RF13MTXF = transmit_buffer[buffer_last_read_index];
-                    checksum += transmit_buffer[buffer_last_read_index];
-                }else{
-                    break;
-                }
+                RF13MTXF = transmit_buffer[x + buffer_read_index];
+                checksum += transmit_buffer[x + buffer_read_index];
+                buffer_read_index += 1;
             }
             RF13MTXF = checksum;
         }
@@ -279,6 +271,7 @@ __interrupt void RF_Int(void){
         request_transmit = 1;
         break;
     case 4:
+        //Transmit done
         RF13MCTL |= RF13MRXEN;
         break;
     default:
@@ -294,9 +287,9 @@ __interrupt void TIMER0_A1_ISR(void){
 
     TA0CCR1 += 160;
 
-    //if(request_transmit && timer_loop_counter != 0){
-    //    TIMER_STATE = TRANSMIT;
-    //}
+    if(request_transmit && buffer_write_index != 0){
+        TIMER_STATE = TRANSMIT;
+    }
 
     switch(iv){
     case 0x2:
@@ -304,6 +297,9 @@ __interrupt void TIMER0_A1_ISR(void){
         case ACQUIRE:
             transmit_buffer[buffer_write_index] = buffer_write_index;
             buffer_write_index += 1;
+            if(buffer_write_index >= BUFFER_SIZE){
+                buffer_write_index = 0;
+            }
             break;
         case TRANSMIT:
             parse_iso_15693();
