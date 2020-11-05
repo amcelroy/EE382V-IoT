@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+	<canvas id="streamCanvas" width="1080" height="720"></canvas>
+
+</body>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io();
+    var url;
+    var streamCanvasCtx = document.getElementById('streamCanvas').getContext('2d');
+    var blob;
+    var img = new Image();
+    var readyNextImage = true;
+    
+window.onload = () => {
+	socket.emit('message', 'processed');
+    }
+
+    socket.on('frame', data => {
+	    if(readyNextImage){
+		readyNextImage = false;
+		blob = new Blob([data], {type: "image/jpeg"});
+		img.src = window.URL.createObjectURL(blob);
+		img.onload = () => {
+			streamCanvasCtx.drawImage(img, 0, 0);
+			readyNextImage = true;
+			socket.emit('message', 'processed');
+		}
+	    }
+    });
+</script>
+</html>
