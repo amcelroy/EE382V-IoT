@@ -46,21 +46,22 @@ int main(int argc, char **argv){
     bool jpeg_start = false;
     memset(read_buffer, 0, sizeof(read_buffer));
     while(recv(sockfd, read_buffer, sizeof(read_buffer), 0)){
-		char *ptr = strstr(read_buffer, "\r\n\r\n");
-		if(ptr && jpeg_start == false){
-			int offset = ptr - read_buffer + 4;
-			fwrite(&read_buffer[offset], 1, sizeof(read_buffer) - offset, f);
-	    	jpeg_start = true;
+
+		if(jpeg_start == false){
+			char *ptr = strstr(read_buffer, "\r\n\r\n");
+			if(ptr){
+				int offset = ptr - read_buffer + 4;
+				fwrite(&read_buffer[offset], 1, sizeof(read_buffer) - offset, f);
+		    	jpeg_start = true;
+			}
 		}else{
-			if(jpeg_start){
-				char jpeg_end[3] = {0xFF, 0xD9, 0xFF};
-				char *ptr = strstr(read_buffer, jpeg_end);
-				if(ptr){
-					int offset = ptr - read_buffer;
-					fwrite(read_buffer, 1, sizeof(read_buffer) - offset, f);
-				}else{
-					fwrite(read_buffer, 1, sizeof(read_buffer), f);
-				}
+			char jpeg_end[3] = {0xFF, 0xD9};
+			char *ptr = strstr(read_buffer, jpeg_end);
+			if(ptr){
+				int offset = ptr - read_buffer + 1;
+				fwrite(read_buffer, 1, offset, f);
+			}else{
+				fwrite(read_buffer, 1, sizeof(read_buffer), f);
 			}
 		}
     	memset(read_buffer, 0, sizeof(read_buffer));
