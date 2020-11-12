@@ -1,6 +1,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <stdio.h>
+#include <stdbool.h>
 
 //Inspired by:
 //https://stackoverflow.com/questions/22077802/simple-c-example-of-doing-an-http-post-and-consuming-the-response/22135885
@@ -8,8 +10,8 @@
 int main(int argc, char **argv){
 	struct addrinfo hints, *res;
 
-	char read_buffer[1024];
-	char write_buffer[1024];
+	char read_buffer[256];
+	char write_buffer[256];
 
     //get host info, make socket and connect it
     memset(&hints, 0, sizeof hints);
@@ -36,14 +38,34 @@ int main(int argc, char **argv){
     	return -1;
     }
 
-    memcpy(write_buffer, "GET / HTTP/1.1\r\n\r\n", strlen("GET / HTTP/1.1\r\n\r\n"));
+    memcpy(write_buffer, "GET /snapshot HTTP/1.1\r\n\r\n", strlen("GET /snapshot HTTP/1.1\r\n\r\n"));
 
-    c = write(sockfd, write_buffer, strlen("GET / HTTP/1.1\r\n\r\n"));
+    c = write(sockfd, write_buffer, strlen("GET /snapshot HTTP/1.1\r\n\r\n"));
 
-    while(c != 0){
-        c = read(sockfd, read_buffer, sizeof(read_buffer));
-        printf(read_buffer);
+    FILE *f = fopen("snapshot.jpg", "w");
+    bool jpeg_start = false;
+    memset(read_buffer, 0, sizeof(read_buffer));
+    while(recv(sockfd, read_buffer, sizeof(read_buffer), 0)){
+		char *ptr = strstr(read_buffer, "\r\n\r\n");
+		if(ptr && jpeg_start == false){
+			int offset = ptr - read_buffer + 4;
+			fwrite(&read_buffer[offset], 1, sizeof(read_buffer) - offset, f);
+	    	jpeg_start = true;
+		}else{
+			if(jpeg_start){
+				char jpeg_end[3] = {0xFF, 0xD9, 0xFF};
+				char *ptr = strstr(read_buffer, jpeg_end);
+				if(ptr){
+					int offset = ptr - read_buffer;
+					fwrite(read_buffer, 1, sizeof(read_buffer) - offset, f);
+				}else{
+					fwrite(read_buffer, 1, sizeof(read_buffer), f);
+				}
+			}
+		}
+    	memset(read_buffer, 0, sizeof(read_buffer));
     }
+    fclose(f);
 
 	return 1;
 }
