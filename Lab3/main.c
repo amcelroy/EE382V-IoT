@@ -3,7 +3,7 @@
 #include <netdb.h>
 #include <stdio.h>
 #include <stdbool.h>
-
+#include <time.h>
 //Inspired by:
 //https://stackoverflow.com/questions/22077802/simple-c-example-of-doing-an-http-post-and-consuming-the-response/22135885
 //https://stackoverflow.com/questions/5444197/converting-host-to-ip-by-sockaddr-in-gethostname-etc
@@ -13,6 +13,7 @@ int main(int argc, char **argv){
 	char read_buffer[1024];
 	char write_buffer[64];
 	char buffer[128];
+	clock_t start,end;
 
     //get host info, make socket and connect it
     memset(&hints, 0, sizeof hints);
@@ -42,6 +43,7 @@ int main(int argc, char **argv){
     serv_addr.sin_port = htons(80); //Converts to big endian
     memcpy(&serv_addr.sin_addr, server->h_addr_list[0], server->h_length);
 
+    start = clock(); 
     int c = connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
 
     if(c){
@@ -76,7 +78,11 @@ int main(int argc, char **argv){
     	memset(read_buffer, 0, sizeof(read_buffer));
     }
     fclose(f);
-
+    end = clock(); 
+    double total = (double)(end-start)/(1000000);
+    //printf("start %f\n",start);
+    //printf("end %f\n", end);
+    printf("total time taken is %f\n",total);
     shutdown(sockfd, 0);
 
 	return 1;
