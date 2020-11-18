@@ -78,12 +78,12 @@ int main(int argc, char **argv){
     	memset(read_buffer, 0, sizeof(read_buffer));
     }
     fclose(f);
+    shutdown(sockfd, 0);
     end = clock(); 
     double total = (double)(end-start)/(1000000);
     //printf("start %f\n",start);
     //printf("end %f\n", end);
     printf("total time taken is %f\n",total);
-    shutdown(sockfd, 0);
 
 	return 1;
 }
