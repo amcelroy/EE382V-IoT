@@ -13,7 +13,8 @@ int main(int argc, char **argv){
 	char read_buffer[1024];
 	char write_buffer[64];
 	char buffer[128];
-	clock_t start,end;
+	double start,end;
+	struct timespec ts; 
 
     //get host info, make socket and connect it
     memset(&hints, 0, sizeof hints);
@@ -43,7 +44,9 @@ int main(int argc, char **argv){
     serv_addr.sin_port = htons(80); //Converts to big endian
     memcpy(&serv_addr.sin_addr, server->h_addr_list[0], server->h_length);
 
-    start = clock(); 
+    //start = clock(); 
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    start = ts.tv_sec + (double)ts.tv_nsec / 1000000000;
     int c = connect(sockfd, (struct sockaddr *)&serv_addr, sizeof(serv_addr));
 
     if(c){
@@ -79,10 +82,13 @@ int main(int argc, char **argv){
     }
     fclose(f);
     shutdown(sockfd, 0);
-    end = clock(); 
-    double total = (double)(end-start)/(1000000);
-    //printf("start %f\n",start);
-    //printf("end %f\n", end);
+    //end = clock(); 
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    end = ts.tv_sec + (double)ts.tv_nsec / 1000000000;
+
+    double total = end-start;
+    printf("start %f\n",start);
+    printf("end %f\n", end);
     printf("total time taken is %f\n",total);
 
 	return 1;
