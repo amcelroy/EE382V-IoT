@@ -10,14 +10,17 @@
 int main(int argc, char **argv){
 	struct addrinfo hints, *res;
 
-	char read_buffer[256];
-	char write_buffer[256];
+	char read_buffer[1024];
+	char write_buffer[64];
+	char buffer[128];
 
     //get host info, make socket and connect it
     memset(&hints, 0, sizeof hints);
     hints.ai_family=AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
     getaddrinfo("amcelroy.dyndns.org","80", &hints, &res);
+    printf(res->ai_addr->sa_data);
+    fflush(stdout);
 
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if(sockfd < 0){
@@ -27,6 +30,13 @@ int main(int argc, char **argv){
     struct hostent *server = gethostbyname("amcelroy.dyndns.org");
 
     struct sockaddr_in serv_addr;
+
+    uint8_t *address_as_uint8 = (uint8_t*)(server->h_addr_list[0]);
+    memset(buffer, 0, sizeof(buffer));
+    sprintf(buffer, "Address is: %i.%i.%i.%i\r\n", address_as_uint8[0], address_as_uint8[1], address_as_uint8[2], address_as_uint8[3]);
+    printf(buffer);
+    fflush(stdout);
+
     memset(&serv_addr,0 , sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(80); //Converts to big endian
@@ -38,15 +48,14 @@ int main(int argc, char **argv){
     	return -1;
     }
 
-    memcpy(write_buffer, "GET /snapshot HTTP/1.1\r\n\r\n", strlen("GET /snapshot HTTP/1.1\r\n\r\n"));
+    char write_msg[] = "GET /snapshot HTTP/1.1\r\n\r\n";
+    memcpy(write_buffer, write_msg, strlen(write_msg));
+    c = write(sockfd, write_buffer, strlen(write_msg));
 
-    c = write(sockfd, write_buffer, strlen("GET /snapshot HTTP/1.1\r\n\r\n"));
-
-    FILE *f = fopen("snapshot.jpg", "w");
+    FILE *f = fopen("snapshot.jpg", "wb");
     bool jpeg_start = false;
     memset(read_buffer, 0, sizeof(read_buffer));
     while(recv(sockfd, read_buffer, sizeof(read_buffer), 0)){
-
 		if(jpeg_start == false){
 			char *ptr = strstr(read_buffer, "\r\n\r\n");
 			if(ptr){
@@ -67,6 +76,8 @@ int main(int argc, char **argv){
     	memset(read_buffer, 0, sizeof(read_buffer));
     }
     fclose(f);
+
+    shutdown(sockfd, 0);
 
 	return 1;
 }
