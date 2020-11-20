@@ -1,0 +1,10 @@
+[Unit]
+Description=EE382V Camera Server
+
+[Service]
+Type=simple
+WorkingDirectory=/home/pi/EE382V-IoT/Lab3/ee382v_server
+ExecStart=/usr/bin/python3 main.py
+
+[Install]
+WantedBy=multi-user.target
