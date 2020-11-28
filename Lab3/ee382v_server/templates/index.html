@@ -1,14 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<script src="/static/uikit.min.js"></script>
+<link rel="stylesheet" href="/static/uikit.min.css">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
+<nav class="uk-navbar-container uk-margin-small-bottom" uk-navbar>
+	<div class="uk-navbar-left">
+		<ul class="uk-navbar-nav">
+			<li class="uk-active"><a>EE382 IoT Remote Object Detection Server</a></li>
+		</ul>
+	</div>
+</nav>
 <body>
-	<canvas id="streamCanvas" width="1080" height="720"></canvas>
-
+	<div class="uk-container uk-flex">
+		<div class="uk-card uk-card-body uk-card-default">
+			<h3 class="uk-card-title">Raw Stream</h3>
+			<canvas id="streamCanvas" width="512" height="512"></canvas>
+		</div>
+		<div class="uk-card uk-card-body uk-card-default">
+			<h3 class="uk-card-title">Detection Stream</h3>
+			<canvas id="labelsCanvas" width="512" height="512"></canvas>
+		</div>
+	</div>
 </body>
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
@@ -16,11 +34,13 @@
     var socket = io();
     var url;
     var streamCanvasCtx = document.getElementById('streamCanvas').getContext('2d');
+    var labelsCanvasCtx = document.getElementById('labelsCanvas').getContext('2d');
     var blob;
     var img = new Image();
     var readyNextImage = true;
-    
-window.onload = () => {
+    var labelsImg = new Image();    
+
+    window.onload = () => {
 	socket.emit('message', 'processed');
     }
 
@@ -36,5 +56,14 @@ window.onload = () => {
 		}
 	    }
     });
+
+    socket.on('labels', data => {
+	    var labelBlob = new Blob([data], {type: "image/jpeg"});
+	    labelsImg.src = window.URL.createObjectURL(labelBlob);
+	    labelsImg.onload = () => {
+		labelsCanvasCtx.drawImage(labelsImg, 0, 0);
+	    }
+    });
+
 </script>
 </html>
