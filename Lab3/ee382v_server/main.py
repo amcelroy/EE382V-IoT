@@ -19,7 +19,7 @@ def message_handler(message):
         socketio.emit('frame', q.get())
 
 def camera_thread(q):
-    camera.resolution = (1080, 720)
+    camera.resolution = (512, 512)
     camera.start_preview()
     time.sleep(2)
     count = 0
