@@ -3,7 +3,7 @@ import time
 import pickle
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-from imagecodecs import jpeg_decode
+from imagecodecs import jpeg_decode, jpeg_encode
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'    # Suppress TensorFlow logging (1)
 import pathlib
@@ -18,23 +18,6 @@ tf.get_logger().setLevel('ERROR')           # Suppress TensorFlow logging (2)
 gpus = tf.config.experimental.list_physical_devices('GPU')
 for gpu in gpus:
     tf.config.experimental.set_memory_growth(gpu, True)
-
-def download_images():
-    base_url = 'https://raw.githubusercontent.com/tensorflow/models/master/research/object_detection/test_images/'
-    filenames = ['image1.jpg', 'image2.jpg']
-    image_paths = []
-    for filename in filenames:
-        image_path = tf.keras.utils.get_file(fname=filename,
-                                            origin=base_url + filename,
-                                            untar=False)
-        image_path = pathlib.Path(image_path)
-        image_paths.append(str(image_path))
-    return image_paths
-
-IMAGE_PATHS = download_images()
-print(IMAGE_PATHS)
-IMAGE_PATHS = [os.path.abspath('image3.jpeg')]
-print(IMAGE_PATHS)
 
 # Download and extract model
 def download_model(model_name, model_date):
@@ -113,7 +96,9 @@ def infer(image, count):
     #print('Running inference for {}... '.format(image_path), end='')
     print('Running inference')
     #image_np = load_image_into_numpy_array(image_path)
+    print(type(image))
     image_np = np.array(image)
+    #print(type(image_np))
 
     infer_start = time.time_ns()
     # Things to try:
@@ -162,9 +147,9 @@ def infer(image, count):
     plt.figure()
     plt.imshow(image_np_with_detections)
     plt.axis('off')
-    plt.savefig('infer{}.jpg'.format(count))
-    print('Infer done in %f seconds' % ((time.time_ns-infer_start)/1000000000))
-
+    #plt.savefig('infer{}.jpg'.format(count))
+    print('Infer done in %f seconds' % ((time.time_ns()-infer_start)/1000000000))
+    return image_np_with_detections
 
 
 
@@ -175,8 +160,9 @@ def save_myimage(my_im):
     
     print(output_filename)
     plt.savefig(output_filename, bbox_inches=0)
-    print("done")
 
+
+sio = socketio.Client(logger=False, engineio_logger=False, ssl_verify = False)
 
 @sio.event
 def connect():
@@ -199,28 +185,28 @@ def snapshot(image):
     print('Received snapshot at time %f s'% ((time.time_ns() - start_time)/1000000000))
 
     my_im = jpeg_decode(image)
-    infer(my_im,0)
+    new_im = infer(my_im,0)
+    im_jpeg = jpeg_encode(new_im)
+    sio.emit('label', data=bytes(im_jpeg))
     print("done")
 
 
-
-sio = socketio.Client(logger=False, engineio_logger=False, ssl_verify = False)
-
 start_time = time.time_ns() 
-output_filename = 'output0.jpg'
+
 
 sio.connect('https://amcelroy.dyndns.org')
 
 print('sending processed message at time %f s' % ((time.time_ns() - start_time)/1000000000))
 
 sio.emit('message',data="serverGetFrame")
-
 sio.sleep(5)
-output_filename = 'output1.jpg'
-print('sending processed message at time %f s' % ((time.time_ns() - start_time)/1000000000))
 
-sio.emit('message',data="serverGetFrame")
+while(1):
+    print('sending processed message at time %f s' % ((time.time_ns() - start_time)/1000000000))
+    sio.emit('message',data="serverGetFrame")
+    sio.sleep(5)
 
-sio.sleep(20)
+
+sio.sleep(10)
 sio.disconnect()
 exit()
