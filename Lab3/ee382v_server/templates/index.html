@@ -57,7 +57,7 @@
 	    }
     });
 
-    socket.on('labels', data => {
+    socket.on('label', data => {
 	    var labelBlob = new Blob([data], {type: "image/jpeg"});
 	    labelsImg.src = window.URL.createObjectURL(labelBlob);
 	    labelsImg.onload = () => {
