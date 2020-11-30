@@ -12,6 +12,11 @@ app = Flask(__name__, static_url_path='/static')
 socketio = SocketIO(app)
 camera = PiCamera()
 
+@socketio.on('label')
+def label_handler(data):
+    print('Label sent')
+    socketio.emit('label', data)
+
 @socketio.on('message')
 def message_handler(message):
     print(message)
@@ -25,7 +30,7 @@ def camera_thread(q):
     camera.start_preview()
     time.sleep(2)
     count = 0
-    for foo in camera.capture_continuous(stream, 'jpeg', use_video_port=True, quality=10):
+    for foo in camera.capture_continuous(stream, 'jpeg', use_video_port=True, quality=30):
         num_bytes = stream.tell()
         stream.seek(0)
         q.put(stream.read(num_bytes))
