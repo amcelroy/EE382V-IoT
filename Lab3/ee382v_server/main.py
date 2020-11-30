@@ -17,6 +17,8 @@ def message_handler(message):
     print(message)
     if message == 'processed':
         socketio.emit('frame', q.get())
+    elif message == 'serverGetFrame':
+        socketio.emit('snapshot', q.get())
 
 def camera_thread(q):
     camera.resolution = (512, 512)
